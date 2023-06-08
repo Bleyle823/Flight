@@ -10,7 +10,7 @@ export default function BottomNav() {
   return (
     //@ts-ignore
     <center>
-      <div className=" fixed fill-[#1F2937] dark:fill-white bottom-5 w-full  ">
+      <div className=" fixed fill-[#000000] dark:fill-white bottom-5 w-full  ">
         <div className=" shadow-2xl flex justify-center items-center bg-white border-[#F3F4F6]  dark:bg-[#111827] dark:border-[#374151] border  rounded-xl max-w-[24rem] py-3 px-5">
           <Link href="/">
             <div className=" bg-gray-100 dark:bg-[#1F2937] w-[60px] h-[60px] flex justify-center items-center mx-2 rounded-xl cursor-pointer hover:bg-[#3B82F6] dark:hover:bg-[#3B82F6] ">

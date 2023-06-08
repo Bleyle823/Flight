@@ -7,10 +7,10 @@ import { project } from "../data/project";
 export default function Project() {
   return (
     <div className="container mx-auto flex flex-col justify-center h-full w-full relative px-3">
-      <div className="bg-[#60A5FA] h-[120px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
-      <div className="bg-[#60A5FA] h-[120px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
+      <div className="bg-[#d83838] h-[120px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
+      <div className="bg-[#d83838] h-[120px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
       <div className="py-10  relative">
-        <div className="bg-[#60A5FA] h-[120px] top-[30rem] left-[5px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
+        <div className="bg-[#d83838] h-[120px] top-[30rem] left-[5px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
 
         <div className="flex flex-col items-start">
           <h1 className="SpaceGroteskBold text-5xl">Lorem ipsum💡</h1>

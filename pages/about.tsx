@@ -4,8 +4,8 @@ import React from "react";
 export default function About() {
   return (
     <div className="container mx-auto flex flex-col items-start px-5 mt-6 max-w-5xl min-h-[182vh] xs:min-h-[170vh] sm:min-h-screen ">
-      <div className="bg-[#60A5FA] h-[120px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
-      <div className="bg-[#60A5FA] h-[120px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
+      <div className="bg-[#d83838]  h-[120px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
+      <div className="bg-[#d83838]  h-[120px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
       <h1 className="SpaceGroteskBold text-[50px] sm:text-[64px]">
       Lorem ipsum dolor sit amet, 👨‍
       </h1>
@@ -18,7 +18,7 @@ export default function About() {
         Lorem ipsum dolor .
         </span>
       </h1>
-      <div className="bg-[#60A5FA] h-[120px] top-[30rem] left-[5px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
+      <div className="bg-[#d83838]  h-[120px] top-[30rem] left-[5px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
 
       <div className="SpaceGroteskRegular text-[20px] sm:text-[24px]  max-w-5xl mt-3">
         <p className="SpaceGroteskRegular text-[20px] sm:text-[24px]  py-5">
