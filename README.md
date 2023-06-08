@@ -1,2 +1,52 @@
-# Flight
-Flight is a decentralized platform that creates a vibrant community where FPV pilots, racers, and drone enthusiasts can hang out, connect, chat, and collaborate even go out on virtual FPV expeditions thereby serving as a hub for team formations, race planning, and knowledge sharing.
+
+
+<h1 align="center">
+ FLIGHT 🚁
+</h1>
+
+
+
+
+
+
+## 🚀 Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+## ✍ Customizing Tailwind Typography
+
+[Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) is an official tailwind plugin that provides a set of `prose` classes to add beautiful typographic defaults to any vanilla HTML you don't control (like HTML rendered from Markdown, or pulled from a CMS).
+
+To customize the defaults provided by the plugin, add the overrides under the `typography` key in the theme section of the `tailwind.config.js` file. Refer to its [default styles](https://github.com/tailwindlabs/tailwindcss-typography/blob/master/src/styles.js) for more in-depth examples.
+
+For more information, please check out Tailwind Typography's [customization section](https://github.com/tailwindlabs/tailwindcss-typography#customization).
+
+## 📖 Learn More
+
+### Next.js
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+
+
+### Tailwind CSS
+
+To learn more about Tailwind CSS, take a look at the following resources:
+
+- [Tailwind Documentation](https://tailwindcss.com/) - learn about Tailwind CSS features and API.
+
+
+## ☁ Deploy
+
