@@ -28,10 +28,13 @@ export default function Hero() {
 
       <div className="flex flex-col items-center  justify-center">
         <img
-          src="/Drone1.png"
-         
+          src="/BoredApePilot.png"
+          width="750"
+          height="750"
         />
       </div>
+      <div className="bg-[#d83838] h-[100px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
+      <div className="bg-[#d83838] h-[100px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
     </div>
         
 
