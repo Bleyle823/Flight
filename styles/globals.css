@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @font-face {
     font-family: SpaceGroteskBold;
     src: url(/fonts/SpaceGrotesk-Bold.ttf);

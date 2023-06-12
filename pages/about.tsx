@@ -1,53 +1,335 @@
 /* eslint-disable react/no-unescaped-entities */
-import React from "react";
+import type { NextPage } from "next";
+import Head from "next/head";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-export default function About() {
+import * as PushAPI from "@pushprotocol/restapi";
+import { ENV } from "@pushprotocol/restapi/src/lib/constants";
+import { produce } from "immer";
+import { useAccount, useNetwork, useSigner } from "wagmi";
+import styled from "styled-components";
+
+import { usePushSocket } from "../hooks/usePushSocket";
+import { useEffect, useRef, useState } from "react";
+import VideoPlayer from "../components/VideoPlayer";
+import { ADDITIONAL_META_TYPE } from "@pushprotocol/restapi/src/lib/payloads/constants";
+
+interface VideoCallMetaDataType {
+  recipientAddress: string;
+  senderAddress: string;
+  chatId: string;
+  signalData?: any;
+  status: number;
+}
+
+// env which will be used for the video call
+const env = ENV.DEV;
+
+const Home: NextPage = () => {
+  const { address, isConnected } = useAccount();
+  const { chain } = useNetwork();
+  const { data: signer } = useSigner();
+  const { pushSocket, isPushSocketConnected, latestFeedItem } = usePushSocket({
+    env,
+  });
+
+  const videoObjectRef = useRef<PushAPI.video.Video>();
+  const recipientAddressRef = useRef<HTMLInputElement>(null);
+  const chatIdRef = useRef<HTMLInputElement>(null);
+
+  const [data, setData] = useState<PushAPI.VideoCallData>(
+    PushAPI.video.initVideoCallData
+  );
+
+  const setRequestVideoCall = async () => {
+    // update the video call 'data' state with the outgoing call data
+    videoObjectRef.current?.setData((oldData) => {
+      return produce(oldData, (draft: any) => {
+        if (!recipientAddressRef || !recipientAddressRef.current) return;
+        if (!chatIdRef || !chatIdRef.current) return;
+
+        draft.local.address = address;
+        draft.incoming[0].address = recipientAddressRef.current.value;
+        draft.incoming[0].status = PushAPI.VideoCallStatus.INITIALIZED;
+        draft.meta.chatId = chatIdRef.current.value;
+      });
+    });
+
+    // start the local media stream
+    await videoObjectRef.current?.create({ video: true, audio: true });
+  };
+
+  const setIncomingVideoCall = async (
+    videoCallMetaData: VideoCallMetaDataType
+  ) => {
+    // update the video call 'data' state with the incoming call data
+    videoObjectRef.current?.setData((oldData) => {
+      return produce(oldData, (draft) => {
+        draft.local.address = videoCallMetaData.recipientAddress;
+        draft.incoming[0].address = videoCallMetaData.senderAddress;
+        draft.incoming[0].status = PushAPI.VideoCallStatus.RECEIVED;
+        draft.meta.chatId = videoCallMetaData.chatId;
+        draft.meta.initiator.address = videoCallMetaData.senderAddress;
+        draft.meta.initiator.signal = videoCallMetaData.signalData;
+      });
+    });
+
+    // start the local media stream
+    await videoObjectRef.current?.create({ video: true, audio: true });
+  };
+
+  const acceptVideoCallRequest = async () => {
+    if (!data.local.stream) return;
+
+    await videoObjectRef.current?.acceptRequest({
+      signalData: data.meta.initiator.signal,
+      senderAddress: data.local.address,
+      recipientAddress: data.incoming[0].address,
+      chatId: data.meta.chatId,
+    });
+  };
+
+  const connectHandler = (videoCallMetaData: VideoCallMetaDataType) => {
+    videoObjectRef.current?.connect({
+      signalData: videoCallMetaData.signalData,
+    });
+  };
+
+  // initialize video call object
+  useEffect(() => {
+    if (!signer || !address || !chain?.id) return;
+
+    (async () => {
+      const user = await PushAPI.user.get({
+        account: address,
+        env,
+      });
+      let pgpPrivateKey = null;
+      if (user?.encryptedPrivateKey) {
+        pgpPrivateKey = await PushAPI.chat.decryptPGPKey({
+          encryptedPGPPrivateKey: user.encryptedPrivateKey,
+          account: address,
+          signer,
+          env,
+        });
+      }
+
+      videoObjectRef.current = new PushAPI.video.Video({
+        signer,
+        chainId: chain.id,
+        pgpPrivateKey,
+        env,
+        setData,
+      });
+    })();
+  }, [signer, address, chain]);
+
+  // after setRequestVideoCall, if local stream is ready, we can fire the request()
+  useEffect(() => {
+    (async () => {
+      const currentStatus = data.incoming[0].status;
+
+      if (
+        data.local.stream &&
+        currentStatus === PushAPI.VideoCallStatus.INITIALIZED
+      ) {
+        await videoObjectRef.current?.request({
+          senderAddress: data.local.address,
+          recipientAddress: data.incoming[0].address,
+          chatId: data.meta.chatId,
+        });
+      }
+    })();
+  }, [data.incoming, data.local.address, data.local.stream, data.meta.chatId]);
+
+  // establish socket connection
+  useEffect(() => {
+    if (!pushSocket?.connected) {
+      pushSocket?.connect();
+    }
+  }, [pushSocket]);
+
+  // receive video call notifications
+  useEffect(() => {
+    if (!isPushSocketConnected || !latestFeedItem) return;
+
+    const { payload } = latestFeedItem || {};
+
+    // check for additionalMeta
+    if (
+      !Object.prototype.hasOwnProperty.call(payload, "data") ||
+      !Object.prototype.hasOwnProperty.call(payload["data"], "additionalMeta")
+    )
+      return;
+
+    const additionalMeta = payload["data"]["additionalMeta"];
+    console.log("RECEIVED ADDITIONAL META", additionalMeta);
+    if (!additionalMeta) return;
+
+    // check for PUSH_VIDEO
+    if (additionalMeta.type !== `${ADDITIONAL_META_TYPE.PUSH_VIDEO}+1`) return;
+    const videoCallMetaData = JSON.parse(additionalMeta.data);
+    console.log("RECIEVED VIDEO DATA", videoCallMetaData);
+
+    if (videoCallMetaData.status === PushAPI.VideoCallStatus.INITIALIZED) {
+      setIncomingVideoCall(videoCallMetaData);
+    } else if (
+      videoCallMetaData.status === PushAPI.VideoCallStatus.RECEIVED ||
+      videoCallMetaData.status === PushAPI.VideoCallStatus.RETRY_RECEIVED
+    ) {
+      connectHandler(videoCallMetaData);
+    } else if (
+      videoCallMetaData.status === PushAPI.VideoCallStatus.DISCONNECTED
+    ) {
+      window.location.reload();
+    } else if (
+      videoCallMetaData.status === PushAPI.VideoCallStatus.RETRY_INITIALIZED &&
+      videoObjectRef.current?.isInitiator()
+    ) {
+      videoObjectRef.current?.request({
+        senderAddress: data.local.address,
+        recipientAddress: data.incoming[0].address,
+        chatId: data.meta.chatId,
+        retry: true,
+      });
+    } else if (
+      videoCallMetaData.status === PushAPI.VideoCallStatus.RETRY_INITIALIZED &&
+      !videoObjectRef.current?.isInitiator()
+    ) {
+      videoObjectRef.current?.acceptRequest({
+        signalData: videoCallMetaData.signalingData,
+        senderAddress: data.local.address,
+        recipientAddress: data.incoming[0].address,
+        chatId: data.meta.chatId,
+        retry: true,
+      });
+    }
+  }, [latestFeedItem]);
+
   return (
-    <div className="container mx-auto flex flex-col items-start px-5 mt-6 max-w-5xl min-h-[182vh] xs:min-h-[170vh] sm:min-h-screen ">
-      <div className="bg-[#d83838]  h-[120px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
-      <div className="bg-[#d83838]  h-[120px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
-      <h1 className="SpaceGroteskBold text-[50px] sm:text-[64px]">
-      Lorem ipsum dolor sit amet, 👨‍
-      </h1>
-      <p className="SpaceGroteskRegular text-[20px] sm:text-[24px] ">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </p>
-      <h1 className="SpaceGroteskRegular py-5 text-2xl sm:text-4xl ">
-      Lorem ipsum {" "}
-        <span className=" text-4xl sm:text-6xl SpaceGroteskBold ">
-        Lorem ipsum dolor .
-        </span>
-      </h1>
-      <div className="bg-[#d83838]  h-[120px] top-[30rem] left-[5px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
+    <div>
+      <Heading>Push Video SDK Demo</Heading>
+      <CallInfo>Video Call Status: {data.incoming[0].status}</CallInfo>
 
-      <div className="SpaceGroteskRegular text-[20px] sm:text-[24px]  max-w-5xl mt-3">
-        <p className="SpaceGroteskRegular text-[20px] sm:text-[24px]  py-5">
-         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec lorem in neque semper luctus. 
-         Ut ex lectus, volutpat commodo sagittis at, dictum in libero. Sed luctus nunc accumsan, lacinia arcu id, dignissim est. 
-         Proin nec lacus vestibulum, semper magna ac, venenatis velit. Mauris nec tempor nisi. Phasellus fermentum ultricies aliquet. 
-         Integer nec fringilla neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-         Vivamus placerat nulla tincidunt mauris porta posuere ac in eros. Pellentesque velit mauris, faucibus vitae dui sed, fringilla consequat arcu.
-         Donec imperdiet eget magna eget luctus. Aenean leo lacus, pharetra in pretium eu, ultricies eget odio. Nullam ac facilisis est.
-        </p>
-        <p className="SpaceGroteskRegular text-[20px] sm:text-[24px]  py-5">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec lorem in neque semper luctus. 
-         Ut ex lectus, volutpat commodo sagittis at, dictum in libero. Sed luctus nunc accumsan, lacinia arcu id, dignissim est. 
-         Proin nec lacus vestibulum, semper magna ac, venenatis velit. Mauris nec tempor nisi. Phasellus fermentum ultricies aliquet. 
-         Integer nec fringilla neque. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-         Vivamus placerat nulla tincidunt mauris porta posuere ac in eros. Pellentesque velit mauris, faucibus vitae dui sed, fringilla consequat arcu.
-         Donec imperdiet eget magna eget luctus. Aenean leo lacus, pharetra in pretium eu, ultricies eget odio. Nullam ac facilisis est.
-        </p>
-      </div>
-      <>
-        <div className="relative block group  my-7 cursor-pointer">
-          <span className="absolute inset-0 border-2  border-[#188AEC] rounded-lg"></span>
-          <div className="transition bg-[#188AEC] text-white rounded-lg group-hover:-translate-x-0  group-hover:-translate-y-0 -translate-x-3 translate-y-2">
-            <div className="py-3 px-10 ">
-              <p className="mt-1 text-xl">Say Hello</p>
-            </div>
-          </div>
-        </div>
-      </>
+      <HContainer>
+        <ConnectButton />
+      </HContainer>
+
+      {isConnected ? (
+        <>
+          <HContainer>
+            <input
+              ref={recipientAddressRef}
+              placeholder="recipient address"
+              type="text"
+            />
+            <input ref={chatIdRef} placeholder="chat id" type="text" />
+          </HContainer>
+
+          <HContainer>
+            <button
+              disabled={
+                data.incoming[0].status !==
+                PushAPI.VideoCallStatus.UNINITIALIZED
+              }
+              onClick={setRequestVideoCall}
+            >
+              Request
+            </button>
+
+            <button
+              disabled={
+                data.incoming[0].status !== PushAPI.VideoCallStatus.RECEIVED
+              }
+              onClick={acceptVideoCallRequest}
+            >
+              Accept Request
+            </button>
+
+            <button
+              disabled={
+                data.incoming[0].status ===
+                PushAPI.VideoCallStatus.UNINITIALIZED
+              }
+              onClick={() => videoObjectRef.current?.disconnect()}
+            >
+              Disconect
+            </button>
+
+            <button
+              disabled={
+                data.incoming[0].status ===
+                PushAPI.VideoCallStatus.UNINITIALIZED
+              }
+              onClick={() =>
+                videoObjectRef.current?.enableVideo({
+                  state: !data.local.video,
+                })
+              }
+            >
+              Toggle Video
+            </button>
+
+            <button
+              disabled={
+                data.incoming[0].status ===
+                PushAPI.VideoCallStatus.UNINITIALIZED
+              }
+              onClick={() =>
+                videoObjectRef.current?.enableAudio({
+                  state: !data.local.audio,
+                })
+              }
+            >
+              Toggle Audio
+            </button>
+          </HContainer>
+
+          <HContainer>
+            <p>LOCAL VIDEO: {data.local.video ? "TRUE" : "FALSE"}</p>
+            <p>LOCAL AUDIO: {data.local.audio ? "TRUE" : "FALSE"}</p>
+            <p>INCOMING VIDEO: {data.incoming[0].video ? "TRUE" : "FALSE"}</p>
+            <p>INCOMING AUDIO: {data.incoming[0].audio ? "TRUE" : "FALSE"}</p>
+          </HContainer>
+
+          <HContainer>
+            <VContainer>
+              <h2>Local Video</h2>
+              <VideoPlayer stream={data.local.stream} isMuted={true} />
+            </VContainer>
+            <VContainer>
+              <h2>Incoming Video</h2>
+              <VideoPlayer stream={data.incoming[0].stream} isMuted={false} />
+            </VContainer>
+          </HContainer>
+        </>
+      ) : (
+        "Please connect your wallet."
+      )}
     </div>
   );
-}
+};
+
+const Heading = styled.h1`
+  margin: 20px 40px;
+`;
+
+const CallInfo = styled.p`
+  margin: 20px 40px;
+`;
+
+const HContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  margin: 20px 40px;
+`;
+
+const VContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  width: fit-content;
+  height: fit-content;
+`;
+
+export default Home;
