@@ -2,83 +2,83 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
-import { project } from "../data/project";
+import { base64StringToBlob, blobToBase64String } from 'lit-js-sdk';
+import { useRef, useEffect } from 'react';
+import { authenticateCeramic, createDocument, loadDocument } from '../scripts/Ceramic';
+import client from '../scripts/Lit';
 
-export default function Project() {
+function App() {
+  const inputRef = useRef(null);
+  const outputRef = useRef(null);
+  const docIdRef = useRef(null);
+  const chain = 'mumbai';
+
+  const mintNFT = async () => {};
+
+  const encrypt = async () => {
+    const accessControlConditionsNFT = [
+      {
+        contractAddress: '0x1A3DAa1EBF7E9409e94D6dc5caDc7aCBbb8F0777',
+        standardContractType: 'ERC1155',
+        chain,
+        method: 'balanceOf',
+        parameters: [':userAddress', '0'],
+        returnValueTest: {
+          comparator: '>',
+          value: '0',
+        },
+      },
+    ];
+    const { encryptedFile, encryptedSymmetricKey } = await client.encryptString(
+      inputRef.current.value,
+      accessControlConditionsNFT
+    );
+    docIdRef.current = await createDocument({
+      encryptedFile: await blobToBase64String(encryptedFile),
+      encryptedSymmetricKey,
+      accessControlConditionsNFT,
+    });
+    outputRef.current.innerText = 'Encrypted and saved to Ceramic: ' + docIdRef.current;
+  };
+
+  const decrypt = async () => {
+    const doc = await loadDocument(docIdRef.current);
+    console.log('HEY HEY', doc.content);
+    const decryptedFile = await client.decryptString(
+      base64StringToBlob(doc.content.encryptedFile),
+      doc.content.encryptedSymmetricKey,
+      doc.content.accessControlConditionsNFT
+    );
+    outputRef.current.innerText = 'Output: ' + decryptedFile;
+  };
+
+  useEffect(() => {
+    authenticateCeramic();
+  }, []);
+
   return (
-    <div className="container mx-auto flex flex-col justify-center h-full w-full relative px-3">
-      <div className="bg-[#d83838] h-[120px] top-36 right-20 absolute w-[120px] rounded-full blur-[90px] filter "></div>
-      <div className="bg-[#d83838] h-[120px] top-[200px] right-[200px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
-      <div className="py-10  relative">
-        <div className="bg-[#d83838] h-[120px] top-[30rem] left-[5px] absolute w-[120px] rounded-full blur-[90px] filter "></div>
-
-        <div className="flex flex-col items-start">
-          <h1 className="SpaceGroteskBold text-5xl">Lorem ipsum💡</h1>
-
-          <p className="SpaceGroteskRegular text-[24px]">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.:
-          </p>
-        </div>
-        <div className="flex flex-col items-center  my-10 ">
-          {project.map((n, index) => {
-            return (
-              <div
-                key={index}
-                className={`flex justify-between w-full flex-col-reverse my-8 sm:my-14 sm:${n.flexrow}  flex-wrap items-start px-7`}
-              >
-                <div className="flex flex-col items-start max-w-2xl ">
-                  <h1 className="text-5xl SpaceGroteskBold mt-6 sm:mt-0">
-                    {n.title}
-                  </h1>
-                  <p className="SpaceGroteskRegular text-xl py-8">
-                    {n.descriptionHtml}
-                  </p>
-                  <a href={n.external} target="_blank" rel="noreferrer">
-                    <div className="relative block group  my-7 cursor-pointer ml-3">
-                      <span className="absolute inset-0 border-2  border-[#188AEC] rounded-lg"></span>
-                      <div className="transition bg-[#188AEC] text-white rounded-lg group-hover:-translate-x-0  group-hover:-translate-y-0 -translate-x-3 translate-y-2">
-                        <div className="py-3 px-10 ">
-                          <p className="mt-1 text-xl">Button</p>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-                <img
-                  src={n.cover}
-                  width="500"
-                  height="500"
-                  className="rounded-lg"
-                />
-              </div>
-            );
-          })}
-
-          {/* <div className="flex justify-between w-full flex-col-reverse sm:flex-row-reverse  my-5 flex-wrap items-start px-7">
-            <div className="flex flex-col items-start max-w-2xl ">
-              <h1 className="text-5xl SpaceGroteskBold">Remotely</h1>
-              <p className="SpaceGroteskRegular text-xl py-8">
-                Remotely is a remote friendly-company — with our headquarters in
-                San Francisco, a second office in LA, and a strong commitment to
-                ensuring people can do great work here and thrive without having
-                to live near an office. This role is open to candidates across
-                the U.S.
-              </p>
-              <>
-                <div className="relative block group  my-7 cursor-pointer ml-3">
-                  <span className="absolute inset-0 border-2  border-[#188AEC] rounded-lg"></span>
-                  <div className="transition bg-[#188AEC] text-white rounded-lg group-hover:-translate-x-0  group-hover:-translate-y-0 -translate-x-3 translate-y-2">
-                    <div className="py-3 px-10 ">
-                      <p className="mt-1 text-xl">View project</p>
-                    </div>
-                  </div>
-                </div>
-              </>
-            </div>
-            <img src="image191.png" width="500" height="500" />
-          </div> */}
-        </div>
+    <div className="p-4">
+      <textarea
+        ref={inputRef}
+        className="border border-gray-300 p-2 w-full h-40 resize-none"
+      ></textarea>
+      <p ref={outputRef} className="mt-4 text-lg"></p>
+      <div className="flex space-x-4 mt-4">
+        <button
+          onClick={encrypt}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        >
+          Encrypt
+        </button>
+        <button
+          onClick={decrypt}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        >
+          Decrypt
+        </button>
       </div>
     </div>
   );
 }
+
+export default App;
