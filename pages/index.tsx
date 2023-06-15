@@ -12,8 +12,7 @@ import { useInactiveListener } from "../hooks/useInactiveListener";
 import { useEagerConnect } from "../hooks/userEagerConnect";
 import Oauth from "../components/oauth";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-
-
+// import SupportChat from "../components/SupportChat";
 
 
 interface Web3ReactState {
@@ -109,6 +108,7 @@ export default function Home() {
       <Oauth/>
     </GoogleOAuthProvider>
   </React.StrictMode>
+  {/* <SupportChat/>  */}
       </>
   )
   
