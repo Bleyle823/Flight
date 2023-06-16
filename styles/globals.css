@@ -2,86 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-    font-family: SpaceGroteskBold;
-    src: url(/fonts/SpaceGrotesk-Bold.ttf);
-  }
-  @font-face {
-    font-family: SpaceGroteskLight;
-    src: url(/fonts/SpaceGrotesk-Light.ttf);
-  }
-@font-face {
-    font-family: SpaceGroteskRegular;
-    src: url(/fonts/SpaceGrotesk-Regular.ttf);
-  }
-  @font-face {
-    font-family: SpaceGroteskSemiBold;
-    src: url(/fonts/SpaceGrotesk-SemiBold.ttf);
-  } 
- @font-face {
-    font-family: Yellowtail;
-    src: url(/fonts/Yellowtail-Regular.ttf);
-  }
 
-.SpaceGroteskBold{
-    font-family: SpaceGroteskBold;
-}
-.SpaceGroteskRegular{
-    font-family: SpaceGroteskRegular;
-}
-.Yellowtail{
-    font-family: Yellowtail;
-}
+.buttons{
+    background: linear-gradient(99.74deg, #ffffff 5.23%, #ff0000 92.7%);
 
-.text {
-    background: linear-gradient(
-      90.2deg,
-      #3b82f6 63.77%,
-      #ec4899 83.43%,
-      #3b82f6 99.94%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-  }
-
-  .App {
-    text-align: center;
-  }
-  
-  .App-logo {
-    height: 40vmin;
-    pointer-events: none;
-  }
-  
-  @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-      animation: App-logo-spin infinite 20s linear;
-    }
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
-  @keyframes App-logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
+}

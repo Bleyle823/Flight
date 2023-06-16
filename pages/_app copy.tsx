@@ -1,4 +1,3 @@
-import '../styles/globals.css'
 import type { AppProps } from "next/app";
 
 import {
@@ -14,7 +13,6 @@ import "@rainbow-me/rainbowkit/styles.css";
 import "../styles/globals.css";
 import { useEffect, useState } from "react";
 import BottomNav from "../components/BottomNav";
-import NavComponent from "../components/NavComponent";
 
 
 const { chains, provider } = configureChains([goerli], [publicProvider()]);
@@ -39,15 +37,12 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-
     <>
       {/* hacky fix for wagmi ssr hydration errors */}
       {loadWagmi ? (
         <WagmiConfig client={wagmiClient}>
           <RainbowKitProvider theme={darkTheme()} chains={chains}>
-          <NavComponent />
             <Component {...pageProps} />
-           
             <BottomNav/>
           </RainbowKitProvider>
         </WagmiConfig>
