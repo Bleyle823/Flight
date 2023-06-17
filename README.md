@@ -1,35 +1,57 @@
 
-# Push Protocol SDK Tutorial
+<h1 align="center">
+  Dev.UI template 
+</h1>
 
-This tutorial & template enables developers to use the PUSH SDK to display all notifications from the user.
+[Design link](https://www.figma.com/community/file/1080739614781022185)
+
+![thumb](https://user-images.githubusercontent.com/62591080/156939036-b0768cbb-f0fd-4779-a465-d25a2f15ce9e.png)
+
+[Open In CodeSandbox](https://githubbox.com/kumard3/dev-ui-templates/tree/main/template-4)
 
 
-Here are the technologies used to create this project: 
-- Next.JS 
-- Push SDK
-- Rainbow Wallet
-- Ankr 
-- Chakra UI
+## 🚀 Getting Started
 
-## Getting Started
+First, run the development server:
 
-The following will enable you to copy the project into your directory and get started immediately! This will run the app in the development mode.
-Open http://localhost:3000 to view it in your browser.
-
-Please ensure that the user has opted-in to channels to display the notifications!
-
-```typescript
-cd push-workshop
-npm install
+```bash
 npm run dev
+# or
+yarn dev
 ```
 
-## Acknowledgements
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-This tutorial leverages all the amazing content and work shared by the Push team! Please take a look into these docs/videos for more info to get you building sooner!
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
- - [Push SDK Starter Kit](https://docs-developers.push.org/developer-tooling/epns-sdk/epns-sdk-starter-kit)
- - [Push SDK Details](https://docs-developers.push.org/developer-tooling/epns-sdk/sdk-packages-details)
- - [Push Protocol 🛠 How to Add Web3 Notifications to Your Project Using Push Protocol - Fabio Costa](https://www.youtube.com/watch?v=h0I7QrRHKzs&t=2394s)
+## ✍ Customizing Tailwind Typography
+
+[Tailwind Typography](https://github.com/tailwindlabs/tailwindcss-typography) is an official tailwind plugin that provides a set of `prose` classes to add beautiful typographic defaults to any vanilla HTML you don't control (like HTML rendered from Markdown, or pulled from a CMS).
+
+To customize the defaults provided by the plugin, add the overrides under the `typography` key in the theme section of the `tailwind.config.js` file. Refer to its [default styles](https://github.com/tailwindlabs/tailwindcss-typography/blob/master/src/styles.js) for more in-depth examples.
+
+For more information, please check out Tailwind Typography's [customization section](https://github.com/tailwindlabs/tailwindcss-typography#customization).
+
+## 📖 Learn More
+
+### Next.js
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+### Tailwind CSS
+
+To learn more about Tailwind CSS, take a look at the following resources:
+
+- [Tailwind Documentation](https://tailwindcss.com/) - learn about Tailwind CSS features and API.
 
 
+## ☁ Deploy
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/kumard3/dev-ui-templates/tree/main/template-4)
+
+[![Deploy with ZEIT Now](https://zeit.co/button)](https://zeit.co/import/project?template=https://github.com/kumard3/dev-ui-templates/tree/main/template-4)
