@@ -5,13 +5,15 @@ export default function AboutSection() {
     <div className="h-screen">
       <div className="flex justify-between items-center px-10 flex-wrap">
         <div className="max-w-[608px]">
-          <h1 className="text-5xl sm:text-[80px]">How do Music NFTs work?</h1>
+          <h1 className="text-5xl sm:text-[80px]">How does Flight FPV Work?</h1>
           <p className="text-xl">
-            NFTs are unique assets stored and tradable on a blockchain. They
-            are, immutable, scarce and publicly verifiable. In the music world,
-            artistes get to sell limited digital content to their fans who pay
-            via crypto. You can now produce any music content that cannot be
-            counterfeited.
+          The platform fosters community engagement by providing a space for FPV pilots and drone enthusiasts to connect, interact,
+          and share their passion for drone racing.<br/> Connect with fellow FPV pilots or enthusiasts via the chat section, 
+          create personalized groups for competitive/non-competitive flying, form teams and organize FPV events after which event tickets can be sold
+          & purchased in a decentralized fashion aided by smart contracts.<br/>  Hop on a peer to peer videocall and go out on an FPV adventure or 
+          create/join a Huddle powered livestream of the pilot channels subscribed to or even create a channel of your own. 
+          Furthermore, you can now sell/buy NFT based aerial videos and pictures through the Marketplace. 
+          Overall, the platform encourages discussions, knowledge sharing, and collaboration among users.
           </p>
         </div>
         < >

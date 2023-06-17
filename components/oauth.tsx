@@ -4,7 +4,7 @@ import * as LitJsSdk_authHelpers from "@lit-protocol/auth-helpers";
 import * as LitJsSdk_types from "@lit-protocol/types";
 import * as LitJsSdk from "@lit-protocol/lit-node-client";
 import { AccsDefaultParams, AuthSig, AuthCallback } from "@lit-protocol/types";
-import { Button, ButtonGroup ,Textarea } from '@chakra-ui/react';
+import { Button, ButtonGroup, TextField } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import {
 	startAuthentication,
@@ -16,272 +16,249 @@ import { computeAddress } from "ethers/lib/utils";
 import { useState } from "react";
 import { getDomainFromOrigin } from "../utils/string";
 
-type CredentialResponse = any;
-
-declare global {
-	interface Window {
-		cbor: any;
-	}
-}
-
 const RELAY_API_URL =
-	process.env.REACT_APP_RELAY_API_URL || "http://localhost:3001";
+  process.env.REACT_APP_RELAY_API_URL || "http://localhost:3001";
 
-    function App() {
-        const [registeredPkpEthAddress, setRegisteredPkpEthAddress] = useState<
-            string
-        >("");
-        const [
-            googleCredentialResponse,
-            setGoogleCredentialResponse,
-        ] = useState<CredentialResponse | null>(null);
-        const [registeredPkpPublicKey, setRegisteredPkpPublicKey] = useState<
-            string
-        >("");
-        const [
-            authenticatedPkpEthAddress,
-            setAuthenticatedPkpEthAddress,
-        ] = useState<string>("");
-        const [authenticatedPkpPublicKey, setAuthenticatedPkpPublicKey] = useState<
-            string
-        >("");
-        const [status, setStatus] = useState("");
-        const [selectedAuthMethod, setSelectedAuthMethod] = useState(6);
-        const [webAuthnUsername, setWebAuthnUsername] = useState<string>("");
-        const [authSig, setAuthSig] = useState<AuthSig | null>(null);
-        const [executeJsSignature, setExecuteJsSignature] = useState<string | null>(
-            null
-        );
-        const [encryptedSymmetricKey, setEncryptedSymmetricKey] = useState<
-            Uint8Array
-        >(new Uint8Array());
-        const [encryptedString, setEncryptedString] = useState<Blob | null>(null);
+function App() {
+  const [registeredPkpEthAddress, setRegisteredPkpEthAddress] = useState("");
+  const [googleCredentialResponse, setGoogleCredentialResponse] = useState(
+    null
+  );
+  const [registeredPkpPublicKey, setRegisteredPkpPublicKey] = useState("");
+  const [authenticatedPkpEthAddress, setAuthenticatedPkpEthAddress] = useState(
+    ""
+  );
+  const [authenticatedPkpPublicKey, setAuthenticatedPkpPublicKey] = useState(
+    ""
+  );
+  const [status, setStatus] = useState("");
+  const [selectedAuthMethod, setSelectedAuthMethod] = useState(6);
+  const [webAuthnUsername, setWebAuthnUsername] = useState("");
+  const [authSig, setAuthSig] = useState(null);
+  const [executeJsSignature, setExecuteJsSignature] = useState(null);
+  const [encryptedSymmetricKey, setEncryptedSymmetricKey] = useState(
+    new Uint8Array()
+  );
+  const [encryptedString, setEncryptedString] = useState(null);
+
+  console.log("STATE", {
+    authenticatedPkpPublicKey,
+    authenticatedPkpEthAddress,
+  });
+
+  const handleLoggedInToGoogle = async (credentialResponse) => {
+    setStatus("Logged in to Google");
+    console.log("Got response from google sign in: ", {
+      credentialResponse,
+    });
+    setGoogleCredentialResponse(credentialResponse);
+  };
+
+  return (
     
-        console.log("STATE", {
-            authenticatedPkpPublicKey,
-            authenticatedPkpEthAddress,
-        });
-    
-        const handleLoggedInToGoogle = async (
-            credentialResponse: CredentialResponse
-        ) => {
-            setStatus("Logged in to Google");
-            console.log("Got response from google sign in: ", {
-                credentialResponse,
-            });
-            setGoogleCredentialResponse(credentialResponse);
-        };
-    
-        return (
-            <div className="App">
-                <div style={{ height: 80 }} />
-                <h1>Welcome To The PKP Demo!</h1>
-                <div style={{ height: 24 }} />
-                <h3>Choose an authentication method to begin:</h3>
-                <ButtonGroup variant="outlined">
-                    <Button
-                        variant={
-                            selectedAuthMethod === 6 ? "contained" : "outlined"
-                        }
-                        onClick={() => setSelectedAuthMethod(6)}
-                    >
-                        Google
-                    </Button>
-                    <Button
-                        variant={
-                            selectedAuthMethod === 3 ? "contained" : "outlined"
-                        }
-                        onClick={() => setSelectedAuthMethod(3)}
-                    >
-                        WebAuthn
-                    </Button>
-                </ButtonGroup>
-                <div style={{ height: 24 }} />
-                <h1>{status}</h1>
-                <div style={{ height: 24 }} />
-                {selectedAuthMethod === 6 && (
-                    <>
-                        <h3>Step 1: Log in with Google.</h3>
-                        <GoogleLogin
-                            onSuccess={handleLoggedInToGoogle}
-                            onError={() => {
-                                console.log("Login Failed");
-                            }}
-                            useOneTap
-                        />
-                        {googleCredentialResponse && (
-                            <div>
-                                <b>Google Credential Response: </b>
-                                {JSON.stringify(googleCredentialResponse)}
-                            </div>
-                        )}
-                        <h3>Step 2: Use Google Credential to Mint PKP.</h3>
-                        <button
-                            onClick={() =>
-                                handleMintPkpUsingGoogleAuth(
-                                    googleCredentialResponse,
-                                    setStatus,
-                                    ({ pkpEthAddress, pkpPublicKey }) => {
-                                        setRegisteredPkpEthAddress(pkpEthAddress);
-                                        setRegisteredPkpPublicKey(pkpPublicKey);
-                                    }
-                                )
-                            }
-                        >
-                            Mint PKP
-                        </button>
-                        {registeredPkpEthAddress && (
-                            <div>
-                                Registered PKP Eth Address:{" "}
-                                {registeredPkpEthAddress}
-                            </div>
-                        )}
-                        <h3>
-                            Step 3: Generate auth sigs from Lit Nodes, then generate
-                            session sigs for storing an encryption condition.
-                        </h3>
-                        <Button
-                            variant="contained"
-                            onClick={async () => {
-                                const {
-                                    encryptedString,
-                                    encryptedSymmetricKey,
-                                    authenticatedPkpPublicKey,
-                                } = await handleStoreEncryptionConditionNodes(
-                                    setStatus,
-                                    googleCredentialResponse
-                                );
-                                setEncryptedString(encryptedString);
-                                setEncryptedSymmetricKey(encryptedSymmetricKey);
-                                setAuthenticatedPkpPublicKey(
-                                    authenticatedPkpPublicKey
-                                );
-                                setAuthenticatedPkpEthAddress(
-                                    publicKeyToAddress(authenticatedPkpPublicKey)
-                                );
-                            }}
-                        >
-                            Authenticate + Encrypt with Lit
-                        </Button>
-                        {authenticatedPkpEthAddress && (
-                            <div>
-                                Authenticated PKP Eth Address:{" "}
-                                {authenticatedPkpEthAddress}
-                            </div>
-                        )}
-                        <h3>
-                            Step 4: Retrieve the decrypted symmetric key from Lit
-                            Nodes.
-                        </h3>
-                        <Button
-                            variant="contained"
-                            onClick={async () => {
-                                await handleRetrieveSymmetricKeyNodes(
-                                    setStatus,
-                                    encryptedSymmetricKey,
-                                    encryptedString!,
-                                    googleCredentialResponse,
-                                    authenticatedPkpEthAddress
-                                );
-                            }}
-                        >
-                            Decrypt
-                        </Button>
-                    </>
-                )}
-                {selectedAuthMethod === 3 && (
-                    <>
-                        <h3>Step 1: Register to mint PKP. (optional username)</h3>
-                        <Textarea
-                            label="Username"
-                            variant="outlined"
-                            onChange={e => setWebAuthnUsername(e.target.value)}
-                        />
-                        <Button
-                            variant="contained"
-                            onClick={async () => {
-                                await handleWebAuthnRegister(
-                                    webAuthnUsername,
-                                    setStatus,
-                                    ({ pkpEthAddress, pkpPublicKey }) => {
-                                        setRegisteredPkpEthAddress(pkpEthAddress);
-                                        setRegisteredPkpPublicKey(pkpPublicKey);
-                                    }
-                                );
-                            }}
-                        >
-                            Register
-                        </Button>
-                        {registeredPkpEthAddress && (
-                            <div>
-                                <b>Registered PKP Eth Address: </b>
-                                {registeredPkpEthAddress}
-                            </div>
-                        )}
-                        <h3>
-                            Step 2: Authenticate against Lit Nodes to generate auth
-                            sigs.
-                        </h3>
-                        <Button
-                            variant="contained"
-                            onClick={async () => {
-                                const {
-                                    authSig,
-                                    pkpPublicKey,
-                                } = await handleWebAuthnAuthenticate(setStatus);
-                                setAuthSig(authSig);
-    
-                                // After authenticating, we can store the pkpPublicKey for executing a
-                                // Lit Action later.
-                                setAuthenticatedPkpPublicKey(pkpPublicKey);
-                                setAuthenticatedPkpEthAddress(
-                                    computeAddress(`0x${pkpPublicKey}`)
-                                );
-                            }}
-                        >
-                            Authenticate
-                        </Button>
-                        {authenticatedPkpPublicKey && authSig && (
-                            <>
-                                <div>
-                                    <b>Authenticated PKP Public Key: </b>
-                                    {authenticatedPkpPublicKey}
-                                </div>
-                                <div>
-                                    <b>Auth Sig: </b>
-                                    {JSON.stringify(authSig)}
-                                </div>
-                            </>
-                        )}
-                        <h3>
-                            Step 3: Generate session signatures and use them to
-                            execute a Lit Action.
-                        </h3>
-                        <Button
-                            variant="contained"
-                            onClick={async () => {
-                                const signature = await handleExecuteJs(
-                                    setStatus,
-                                    authSig!,
-                                    authenticatedPkpPublicKey
-                                );
-                                setExecuteJsSignature(signature);
-                            }}
-                        >
-                            Execute Lit Action
-                        </Button>
-                        {executeJsSignature && (
-                            <div>
-                                <b>Executed Lit Action Signature: </b>
-                                {executeJsSignature}
-                            </div>
-                        )}
-                    </>
-                )}
+    <div className="flex flex-col justify-center items-center ">
+      <div className="flex flex-col rounded-xl  p-4"
+    style={{
+      border: '0.88px solid',
+
+      backdropFilter: 'saturate(180%) blur(14px)',
+      background: ' #ffffff0d',
+    }}
+  >
+      <div className="h-50"></div>
+      <h5 className="text-center text-3xl">Sign in with Google or WebAuth 🚁</h5>
+      <div className="h-24"></div>
+      <div className="flex flex-col justify-center items-center " >
+      <h3 className="mt-4 mb-2 text-center" >Choose an authentication method to begin:</h3>
+      <ButtonGroup variant="outlined">
+        <Button
+          variant={selectedAuthMethod === 6 ? "contained" : "outlined"}
+          onClick={() => setSelectedAuthMethod(6)}
+        >
+          Google
+        </Button>
+        <Button
+          variant={selectedAuthMethod === 3 ? "contained" : "outlined"}
+          onClick={() => setSelectedAuthMethod(3)}
+        >
+          WebAuthn
+        </Button>
+      </ButtonGroup>
+      </div>
+      <div className="h-24"></div>
+      <h1>{status}</h1>
+      <div className="h-24"></div>
+      {selectedAuthMethod === 6 && (
+        <><div className="flex flex-col justify-center items-center ">
+          <h3 className="mt-4 mb-2 text-center" > Log in with Google.</h3>
+          <GoogleLogin
+            
+            onSuccess={handleLoggedInToGoogle}
+            onError={() => {
+              console.log("Login Failed");
+            }}
+            useOneTap
+          />
+          {googleCredentialResponse && (
+            <div>
+              <b>Google Credential Response: </b>
+              {JSON.stringify(googleCredentialResponse)}
             </div>
-        );
-    }
-    
+          )}
+          </div>
+          <h3 className="mt-4 mb-2 text-center"> Use Google Credential to Mint PKP.</h3>
+          <Button
+            onClick={() =>
+              handleMintPkpUsingGoogleAuth(
+                googleCredentialResponse,
+                setStatus,
+                ({ pkpEthAddress, pkpPublicKey }) => {
+                  setRegisteredPkpEthAddress(pkpEthAddress);
+                  setRegisteredPkpPublicKey(pkpPublicKey);
+                }
+              )
+            }
+          >
+            Mint PKP
+          </Button>
+          {registeredPkpEthAddress && (
+            <div>
+              Registered PKP Eth Address: {registeredPkpEthAddress}
+            </div>
+          )}
+          <h3 className="mt-4 mb-2 text-center">
+            Generate auth sigs from Lit Nodes, then generate session
+            sigs for storing an encryption condition.
+          </h3>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              const {
+                encryptedString,
+                encryptedSymmetricKey,
+                authenticatedPkpPublicKey,
+              } = await handleStoreEncryptionConditionNodes(
+                setStatus,
+                googleCredentialResponse
+              );
+              setEncryptedString(encryptedString);
+              setEncryptedSymmetricKey(encryptedSymmetricKey);
+              setAuthenticatedPkpPublicKey(authenticatedPkpPublicKey);
+              setAuthenticatedPkpEthAddress(
+                publicKeyToAddress(authenticatedPkpPublicKey)
+              );
+            }}
+          >
+            Authenticate + Encrypt with Lit
+          </Button>
+          {authenticatedPkpEthAddress && (
+            <div>
+              Authenticated PKP Eth Address: {authenticatedPkpEthAddress}
+            </div>
+          )}
+          <h3 className="mt-4 mb-2 text-center">Retrieve the decrypted symmetric key from Lit Nodes.</h3>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              await handleRetrieveSymmetricKeyNodes(
+                setStatus,
+                encryptedSymmetricKey,
+                encryptedString!,
+                googleCredentialResponse,
+                authenticatedPkpEthAddress
+              );
+            }}
+          >
+            Decrypt
+          </Button>
+        </>
+      )}
+      {selectedAuthMethod === 3 && (
+        <>
+          <h3>Step 1: Register to mint PKP. (optional username)</h3>
+          <Textarea
+            label="Username"
+            variant="outlined"
+            onChange={(e) => setWebAuthnUsername(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            onClick={async () => {
+              await handleWebAuthnRegister(
+                webAuthnUsername,
+                setStatus,
+                ({ pkpEthAddress, pkpPublicKey }) => {
+                  setRegisteredPkpEthAddress(pkpEthAddress);
+                  setRegisteredPkpPublicKey(pkpPublicKey);
+                }
+              );
+            }}
+          >
+            Register
+          </Button>
+          {registeredPkpEthAddress && (
+            <div>
+              <b>Registered PKP Eth Address: </b>
+              {registeredPkpEthAddress}
+            </div>
+          )}
+          <h3>Step 2: Authenticate against Lit Nodes to generate auth sigs.</h3>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              const { authSig, pkpPublicKey } = await handleWebAuthnAuthenticate(
+                setStatus
+              );
+              setAuthSig(authSig);
+
+              // After authenticating, we can store the pkpPublicKey for executing a
+              // Lit Action later.
+              setAuthenticatedPkpPublicKey(pkpPublicKey);
+              setAuthenticatedPkpEthAddress(
+                computeAddress(`0x${pkpPublicKey}`)
+              );
+            }}
+          >
+            Authenticate
+          </Button>
+          {authenticatedPkpPublicKey && authSig && (
+            <>
+              <div>
+                <b>Authenticated PKP Public Key: </b>
+                {authenticatedPkpPublicKey}
+              </div>
+              <div>
+                <b>Auth Sig: </b>
+                {JSON.stringify(authSig)}
+              </div>
+            </>
+          )}
+          <h3>Step 3: Generate session signatures and use them to execute a Lit Action.</h3>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              const signature = await handleExecuteJs(
+                setStatus,
+                authSig!,
+                authenticatedPkpPublicKey
+              );
+              setExecuteJsSignature(signature);
+            }}
+          >
+            Execute Lit Action
+          </Button>
+          {executeJsSignature && (
+            <div>
+              <b>Executed Lit Action Signature: </b>
+              {executeJsSignature}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+    </div>
+  );
+}
     export default App;
     
     const handleMintPkpUsingGoogleAuth = async (

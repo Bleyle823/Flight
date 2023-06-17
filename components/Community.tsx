@@ -4,17 +4,17 @@ const data = [
   {
     title: "01/",
     description:
-      "Artists themselves become a platform. NFTs allow artistes, especially upcoming ones, to create an ecosystem that allows genuine fans to buy into their market.",
+      ": Each user has a personalized profile on the platform, showcasing their achievements, race history, and expertise. This allows users to build their reputation within the community and provides a platform for recognition and networking among fellow enthusiasts",
   },
   {
     title: "02/",
     description:
-      "NFT gives all the power to creators. Anyone upcoming artiste can do their stuff on-chain, making them more independent and freeing them from unfavorable deals from record labels. ",
+      ": Users can upload and share their FPV racing footage and pictures as non-fungible tokens (NFTs) on the platform. This allows them to showcase their best flights, impressive maneuvers, or unique racing moments. Other users can view, appreciate, and even collect these NFTs as part of the platform's digital racing culture",
   },
   {
     title: "03/",
     description:
-      "A positive NFT-fueled change in the music market can upstage crypto adoption at large.",
+      ": The platform serves as a hub for learning and knowledge exchange. Users can access educational content, tutorials, and guides related to FPV racing, drone technology, and race techniques. They can learn from experienced racers, ask questions, and seek advice from the community.",
   },
 ];
 
@@ -26,7 +26,7 @@ export default function Community() {
       </div>
       <div className="flex flex-col container mx-auto">
         <h1 className="text-5xl sm:text-[80px] flex flex-col ">
-          Engage your <span> Fans with community</span>{" "}
+          Engage <span> Fans with community</span>{" "}
         </h1>
         <div className="flex flex-wrap   justify-center  items-center">
           {data.map((n, index) => {

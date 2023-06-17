@@ -11,32 +11,30 @@ export default function MarketPlace() {
               <div className="grid md:grid-cols-2">
                 <div className="grid content-center ml-[3vw] relative -mt-[10rem]">
                   <div className="py-10">
-                    <NftCard image="top1.png" />
+                    <NftCard image="top1.jpg" />
                   </div>
                   <div className="py-10">
-                    <NftCard image="top2.png" />
+                    <NftCard image="top2.jpg" />
                   </div>
                 </div>
                 <div className="grid content-center ">
                   <div className="py-10">
-                    <NftCard image="top3.png" />
+                    <NftCard image="top3.jpg" />
                   </div>
                   <div className="py-10">
-                    <NftCard image="top4.png" />
+                    <NftCard image="top4.jpg" />
                   </div>
                 </div>
               </div>
             </div>
             <div className="max-w-2xl my-8 space-y-4  xl:col-span-2 text-left">
               <h2 className="text-5xl sm:text-[80px] font-bold">
-                Music NFT Marketplace
+                FPV NFT Marketplace
               </h2>
               <p className="">
-                Create your first music NFTs with NFT market for musicians.
-                Create music and music videos just under the $1, the platform
-                works with BSC blockchain and supports mp4. With AirNFTs, you
-                are getting the control over your NFTs, no middle man cutting
-                your sales. Create, Buy, Sell and Earn with your music NFTs.
+              The platform features a virtual marketplaces where FPV racing enthusiasts can buy & sell NFT based aerial videos and pictures . 
+              By leveraging blockchain, these marketplaces can ensure secure transactions and verifiable ownership. 
+              Pilots can have confidence in the authenticity and condition of the items being traded, fostering trust within the community.
               </p>
 
               <button className="px-6 py-3  border-2 ml-10 flex items-center  sm:text-lg font-bold rounded-3xl glass transition-colors duration-500 text-white ">

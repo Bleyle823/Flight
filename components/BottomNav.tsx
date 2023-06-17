@@ -37,14 +37,14 @@ export default function BottomNav() {
               <img src="/Icons.png" width="35" height="35" />
             </div>
           </Link>
-          <Link href="/about">
+          <Link href="/HuddleLiveStream">
             <div className="transition relative group-hover:-translate-x-1 group-hover:-translate-y-2 bg-gray-100 dark:bg-[#1F2937] l w-[47px] h-[47px] flex justify-center items-center mx-2 rounded-xl cursor-pointer hover:bg-[#f37f7fc2] dark hover:bg-[#f37f7fc2] ">
               <img src="/Icons.png" width="35" height="35" />
             </div>
           </Link>
 
           
-          <Link href="/about">
+          <Link href="/Tickets">
             <div className="transition relative group-hover:-translate-x-1 group-hover:-translate-y-2 bg-gray-100 dark:bg-[#1F2937] l w-[47px] h-[47px] flex justify-center items-center mx-2 rounded-xl cursor-pointer hover:bg-[#f37f7fc2] dark hover:bg-[#f37f7fc2] ">
               <img src="/Icons.png" width="35" height="35" />
             </div>
