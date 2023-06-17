@@ -5,6 +5,8 @@ import Discover from "../components/Discover";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import MarketPlace from "../components/MarketPlace";
+import Oauth from "../components/oauth";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 
 const NftCard = () => {
@@ -77,6 +79,11 @@ export default function index() {
 
       
       <Hero />
+      
+      <GoogleOAuthProvider clientId="1071348522014-3qq1ln33ful535dnd8r4f6f9vtjrv2nu.apps.googleusercontent.com">
+      <Oauth/>
+      </GoogleOAuthProvider>
+   
       <AboutSection />
       <MarketPlace />
       <Community />
