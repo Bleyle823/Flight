@@ -4,14 +4,19 @@
 </h1>
 Flight is a decentralized platform that creates a vibrant community where Drone pilots, racers, and drone enthusiasts can hang out, connect, chat, collaborate and even go out on virtual FPV drone expeditions thereby serving as a hub for team formations, race planning, and knowledge sharing. The "FPV" hobby has been on an upward spiral since 2020 with pilots adopting the popular "FPV"(First Person View) name suffix across social media platforms. The problem however is that this ever-growing community has no real virtual stomping ground. Multi-GP, one of the most popular online community platforms has it's users on Facebook and does not support interaction on the site. Another classic example, Blacksheep FPV only allows buying and selling of drone hardware on it's platform with the rest of engagement being on Instagram. That being said, Flight FPV seeks to onboard this ever growing community of pilots and hobbyists on to a decentralized platform where they can form groups on the chat hence form teams, organize friendly/competitive  races, share ideas, purchase NFT based FPV event tickets, buy/sell their aerial videos and photos creations or even more exiting, go out on virtual FPV expeditions! 🚁
 
-1.FVM - To deploy the Marketplace and Ticketing smart contracts.
-2.ENS - To enable pilots/users to have a personalized avatar derived from the ENS Avatar as well as use their ENS name as their profile name on the platform
-3.Spheron - To deploy the project frontend 
-4.Ceramic + Lit - To allow private sharing of data let alone sensitive data through encryption and decryption in line with pre-defined conditions that are made possible with lit protocol. For example , only holders of the APE token would be able to decrypt flight data and other sensitive data.
-5.ApeCoin- Used as the native currency of the platform to buy and sell NFTS or event tickets
-6.Push Protocol - This makes chatting including group creation, subscribing to favorite pilots via push channels, receiving notifications on live flights and even peer to peer video calling.
-7. Huddle01 - While Push Protocol is leveraged for peer to peer video calls, Huddle is used for live stream functionality, making taking a large audience on a virtual FPV expedition possible.
-8. Lit Protocol - As most of the FPV community still live in the web2 world, onboarding them on to this new world is made easier and convenient to them by providing an option to sign in to the platform with Google accounts using lit protocol's PKP's.
+* FVM - To deploy the Marketplace and Ticketing smart contracts.
+  
+* ENS - To enable pilots/users to have a personalized avatar derived from the ENS Avatar as well as use their ENS name as their profile name on the platform
+  
+* Ceramic + Lit - To allow private sharing of data let alone sensitive data through encryption and decryption in line with pre-defined conditions that are made possible with lit protocol. For example , only holders of the APE token would be able to decrypt flight data and other sensitive data.
+  
+* ApeCoin- Used as the native currency of the platform to buy and sell NFTS or event tickets
+  
+* Push Protocol - This makes chatting including group creation, subscribing to favorite pilots via push channels, receiving notifications on live flights and even peer to peer video calling.
+  
+* Huddle01 - While Push Protocol is leveraged for peer to peer video calls, Huddle is used for live stream functionality, making taking a large audience on a virtual FPV expedition possible.
+  
+* Lit Protocol - As most of the FPV community still live in the web2 world, onboarding them on to this new world is made easier and convenient to them by providing an option to sign in to the platform with Google accounts using lit protocol's PKP's.
 
 
 ## 🚀 Getting Started
@@ -98,9 +103,11 @@ Go to the [Hyperspace testnet faucet](https://hyperspace.yoga/#faucet), and past
 
 ## Deploy the Contracts
 
-Currently there are 3 main types of contracts:
+Currently there are  main types of contracts:
 
-* Basic Solidity Examples: Simple contracts to show off basic solidity
+*  NFT Marketplace : Simple contracts to run marketplace
+  
+*  NFT Ticketing : Event tickets functionality.
 
 * Filecoin API Examples: Contracts that demo how to use the Filecoin APIs in Solidity to access storage deals and other Filecoin specific functions.
 
