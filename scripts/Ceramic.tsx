@@ -5,7 +5,7 @@ import { getResolver as get3IDResolver } from "@ceramicnetwork/3id-did-resolver"
 import { EthereumAuthProvider, ThreeIdConnect } from "@3id/connect";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 
-const threeID = new ThreeIdConnect();
+//const threeID = new ThreeIdConnect();
 const ceramic = new CeramicClient("https://ceramic-clay.3boxlabs.com");
 
 async function authenticateWithEthereum(ethereumProvider) {

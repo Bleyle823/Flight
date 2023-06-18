@@ -152,15 +152,11 @@ nav {
   transition: all 250ms ease;
 }
 
-.nav__connect:hover {
-  background-color: var(--clr-dark-blue);
-}
-
 /* ------------------------------------------------------ */
 /* -- HEADER -- */
 
 header {
-  background-image: linear-gradient(45deg, var(--clr-dark-blue) 10%, var(--clr-light-blue) 20%, var(--clr-dark-blue) 50%, var(--clr-light-blue) 120%);
+  /* Add Drone Event background */
   background-size: contain;
   background-position: right;
   background-repeat: no-repeat;
@@ -373,9 +369,6 @@ header {
   gap: 5px;
   grid-template-columns: repeat(25, 1fr);
 
-  background: linear-gradient(to bottom, var(--clr-light-blue), var(--clr-white) 75%);
-  border: 10px solid var(--clr-grey);
-  border-radius: 8px;
 
   width: 90%;
   max-width: 1200px;

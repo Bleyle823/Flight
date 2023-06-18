@@ -13,6 +13,9 @@ import { usePushSocket } from "../hooks/usePushSocket";
 import { useEffect, useRef, useState } from "react";
 import VideoPlayer from "../components/VideoPlayer";
 import { ADDITIONAL_META_TYPE } from "@pushprotocol/restapi/src/lib/payloads/constants";
+import { CiMicrophoneOn, CiMicrophoneOff } from "react-icons/ci";
+import { BsCameraVideo, BsCameraVideoOff } from "react-icons/bs";
+import Button from "../common/Button";
 
 interface VideoCallMetaDataType {
   recipientAddress: string;
@@ -208,15 +211,17 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Heading>Push Video SDK Demo</Heading>
+      <div className="flex space-x-4 mt-1 justify-center items-center ">
+      <Heading>Peer to Peer Video Call</Heading>
       <CallInfo>Video Call Status: {data.incoming[0].status}</CallInfo>
-
-      <HContainer>
+      </div>
+      {/* <HContainer> 
         <ConnectButton />
-      </HContainer>
+      </HContainer> */}
 
       {isConnected ? (
         <>
+         <div className="flex flex-col mt-2 justify-center items-center ">
           <HContainer>
             <input
               ref={recipientAddressRef}
@@ -225,83 +230,133 @@ const Home: NextPage = () => {
             />
             <input ref={chatIdRef} placeholder="chat id" type="text" />
           </HContainer>
-
+          </div>
+          
+          <div className="flex flex-col min-w-min justify-center items-center ">
           <HContainer>
-            <button
+        
+            <p>LOCAL VIDEO: {data.local.video ? "TRUE" : "FALSE"}</p>
+            <p>LOCAL AUDIO: {data.local.audio ? "TRUE" : "FALSE"}</p>
+            <p>INCOMING VIDEO: {data.incoming[0].video ? "TRUE" : "FALSE"}</p>
+            <p>INCOMING AUDIO: {data.incoming[0].audio ? "TRUE" : "FALSE"}</p>
+            
+          </HContainer>
+          </div>
+          
+
+          <HContainer >
+          <div className="p-1 shadow-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl">
+            <div className=" bg-black sm:p-10 p-6 rounded-xl">
+            <VContainer>
+              <h2>Local Video</h2>
+              <VideoPlayer stream={data.local.stream} isMuted={true} />
+            </VContainer>
+            </div>
+          </div>
+            <div className="p-1 shadow-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl">
+            <div className=" bg-black sm:p-10 p-6 rounded-xl">
+            <VContainer>
+              <h2>Incoming Video</h2>
+              <VideoPlayer stream={data.incoming[0].stream} isMuted={false} />
+            </VContainer>
+            </div>
+          </div>
+            
+          </HContainer>
+
+          <div className="flex flex-col min-w-min justify-center items-center ">
+          <HContainer>
+
+          <button
               disabled={
                 data.incoming[0].status !==
                 PushAPI.VideoCallStatus.UNINITIALIZED
               }
               onClick={setRequestVideoCall}
-            >
-              Request
-            </button>
+            
+           className="relative block group ">
+          <span className="absolute inset-0 border-2 border-white border-dashed rounded-lg"></span>
+          <div className="transition bg-black border-2 border-white rounded-lg group-hover:-translate-x-2 group-hover:-translate-y-2">
+            <div className="p-2 ">
+              <p className="text-xl font-outerSans font-medium">Request</p>
+            </div>
+          </div>
+        </button>
 
-            <button
-              disabled={
+
+        <button
+               disabled={
                 data.incoming[0].status !== PushAPI.VideoCallStatus.RECEIVED
               }
               onClick={acceptVideoCallRequest}
-            >
-              Accept Request
-            </button>
+            
+           className="relative block group ">
+          <span className="absolute inset-0 border-2 border-white border-dashed rounded-lg"></span>
+          <div className="transition bg-black border-2 border-white rounded-lg group-hover:-translate-x-2 group-hover:-translate-y-2">
+            <div className="p-2 ">
+              <p className="text-xl font-outerSans font-medium">Accept Request</p>
+            </div>
+          </div>
+        </button>
+            
+        
+        <button
+                 disabled={
+                  data.incoming[0].status ===
+                  PushAPI.VideoCallStatus.UNINITIALIZED
+                }
+                onClick={() => videoObjectRef.current?.disconnect()}
+            
+           className="relative block group ">
+          <span className="absolute inset-0 border-2 border-white border-dashed rounded-lg"></span>
+          <div className="transition bg-black border-2 border-white rounded-lg group-hover:-translate-x-2 group-hover:-translate-y-2">
+            <div className="p-2 ">
+              <p className="text-xl font-outerSans font-medium">Disconect</p>
+            </div>
+          </div>
+        </button>
+        
+        <button
+                 disabled={
+                  data.incoming[0].status ===
+                  PushAPI.VideoCallStatus.UNINITIALIZED
+                }
+                onClick={() =>
+                  videoObjectRef.current?.enableVideo({
+                    state: !data.local.video,
+                  })
+                }
+            
+           className="relative block group ">
+          <span className="absolute inset-0 border-2 border-white border-dashed rounded-lg"></span>
+          <div className="transition bg-black border-2 border-white rounded-lg group-hover:-translate-x-2 group-hover:-translate-y-2">
+            <div className="p-2 ">
+              <p className="text-xl font-outerSans font-medium">Toggle Video</p>
+            </div>
+          </div>
+        </button>
+        
+        <button
+           disabled={
+            data.incoming[0].status ===
+            PushAPI.VideoCallStatus.UNINITIALIZED
+          }
+          onClick={() =>
+            videoObjectRef.current?.enableAudio({
+              state: !data.local.audio,
+            })
+          }
+           className="relative block group ">
+          <span className="absolute inset-0 border-2 border-white border-dashed rounded-lg"></span>
+          <div className="transition bg-black border-2 border-white rounded-lg group-hover:-translate-x-2 group-hover:-translate-y-2">
+            <div className="p-2 ">
+              <p className="text-xl font-outerSans font-medium">Toggle Audio</p>
+            </div>
+          </div>
+        </button>
 
-            <button
-              disabled={
-                data.incoming[0].status ===
-                PushAPI.VideoCallStatus.UNINITIALIZED
-              }
-              onClick={() => videoObjectRef.current?.disconnect()}
-            >
-              Disconect
-            </button>
-
-            <button
-              disabled={
-                data.incoming[0].status ===
-                PushAPI.VideoCallStatus.UNINITIALIZED
-              }
-              onClick={() =>
-                videoObjectRef.current?.enableVideo({
-                  state: !data.local.video,
-                })
-              }
-            >
-              Toggle Video
-            </button>
-
-            <button
-              disabled={
-                data.incoming[0].status ===
-                PushAPI.VideoCallStatus.UNINITIALIZED
-              }
-              onClick={() =>
-                videoObjectRef.current?.enableAudio({
-                  state: !data.local.audio,
-                })
-              }
-            >
-              Toggle Audio
-            </button>
           </HContainer>
-
-          <HContainer>
-            <p>LOCAL VIDEO: {data.local.video ? "TRUE" : "FALSE"}</p>
-            <p>LOCAL AUDIO: {data.local.audio ? "TRUE" : "FALSE"}</p>
-            <p>INCOMING VIDEO: {data.incoming[0].video ? "TRUE" : "FALSE"}</p>
-            <p>INCOMING AUDIO: {data.incoming[0].audio ? "TRUE" : "FALSE"}</p>
-          </HContainer>
-
-          <HContainer>
-            <VContainer>
-              <h2>Local Video</h2>
-              <VideoPlayer stream={data.local.stream} isMuted={true} />
-            </VContainer>
-            <VContainer>
-              <h2>Incoming Video</h2>
-              <VideoPlayer stream={data.incoming[0].stream} isMuted={false} />
-            </VContainer>
-          </HContainer>
+          </div>
         </>
       ) : (
         "Please connect your wallet."
@@ -311,25 +366,33 @@ const Home: NextPage = () => {
 };
 
 const Heading = styled.h1`
-  margin: 20px 40px;
+ text-align: center;
+	place-self: center;
+  margin: 5px 80px;
+  
 `;
 
 const CallInfo = styled.p`
-  margin: 20px 40px;
+  text-align: center;
+  margin: 10px 40px;
 `;
 
 const HContainer = styled.div`
+justify-items: center;
+
   display: flex;
-  gap: 20px;
-  margin: 20px 40px;
+  gap: 40px;
+  margin: 15px 430px;
 `;
 
 const VContainer = styled.div`
+  place-items: center;
   display: flex;
   gap: 10px;
   flex-direction: column;
   width: fit-content;
   height: fit-content;
+  
 `;
 
 export default Home;
