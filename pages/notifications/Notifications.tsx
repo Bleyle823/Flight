@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, useCallback } from 'react';
-import { Web3Context } from '../context/Web3Context';
+import { Web3Context } from '../../pages/context/web3Context';
 import * as PushAPI from '@pushprotocol/restapi';
 import { NotificationItem, chainNameType } from '@pushprotocol/uiweb';
 import { Text } from '@chakra-ui/react';

@@ -21,8 +21,9 @@ export default function sendInfo() {
   const encrypt = async () => {
     const accessControlConditionsNFT = [
       {
-        contractAddress: '0x1A3DAa1EBF7E9409e94D6dc5caDc7aCBbb8F0777',
-        standardContractType: 'ERC1155',
+        // APECOIN CONTRACT ADDRESS
+        contractAddress: '0x4d224452801aced8b2f0aebe155379bb5d594381',
+        standardContractType: 'ERC720',
         chain,
         method: 'balanceOf',
         parameters: [':userAddress', '0'],
