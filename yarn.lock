@@ -4984,12 +4984,13 @@
     socket.io-client "^4.5.2"
     tslib "^2.3.0"
 
-"@pushprotocol/uiweb@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.npmjs.org/@pushprotocol/uiweb/-/uiweb-0.1.0.tgz"
-  integrity sha512-EDyVCAhrfFogy8DAzWdbFHiD9EVTdr4bidvjwiGGZQuMkyOKnKDVygAD/WsTQznSPevCBmu9el53K203XREsNg==
+"@pushprotocol/uiweb@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/@pushprotocol/uiweb/-/uiweb-0.2.3.tgz"
+  integrity sha512-+V6k8l2wOerjbUBeNiyZKmGu3o1ES4ykIGuUe334osUBtQ0aEmlLxcjLceUkJXiT7cZKgFfMaBNFvrJ/ZQ85eA==
   dependencies:
     date-fns "^2.28.0"
+    emoji-picker-react "^3.5.1"
     html-react-parser "^1.4.13"
 
 "@rainbow-me/rainbowkit@0.12.14":
@@ -11776,6 +11777,11 @@ emittery@^0.8.1:
   version "0.8.1"
   resolved "https://registry.npmjs.org/emittery/-/emittery-0.8.1.tgz"
   integrity sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==
+
+emoji-picker-react@^3.5.1:
+  version "3.6.5"
+  resolved "https://registry.npmjs.org/emoji-picker-react/-/emoji-picker-react-3.6.5.tgz"
+  integrity sha512-pfu3XkHSeqXjygyoKtRsmJdsNkRxhkE7hlnWrYBoPnm8V03aJ8Y9H5oRUQ+fF4WRZpjfJFsw5V7ewRVhuj/8cA==
 
 emoji-regex@^7.0.1:
   version "7.0.3"
