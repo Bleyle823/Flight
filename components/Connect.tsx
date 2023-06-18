@@ -40,7 +40,7 @@ const Auth = () => {
         <VStack>
           <ConnectButton/> 
           {isConnected  ? 
-            <Button onClick={() => connect()} colorScheme='messenger'> Enter Page</Button> 
+            <Button onClick={() => connect()} colorScheme='messenger'> Enter Notifications Page</Button> 
           : null }
         </VStack>
         </>
