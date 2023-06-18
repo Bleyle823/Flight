@@ -4,6 +4,9 @@
 </h1>
 Flight is a decentralized platform that creates a vibrant community where Drone pilots, racers, and drone enthusiasts can hang out, connect, chat, collaborate and even go out on virtual FPV drone expeditions thereby serving as a hub for team formations, race planning, and knowledge sharing. The "FPV" hobby has been on an upward spiral since 2020 with pilots adopting the popular "FPV"(First Person View) name suffix across social media platforms. The problem however is that this ever-growing community has no real virtual stomping ground. Multi-GP, one of the most popular online community platforms has it's users on Facebook and does not support interaction on the site. Another classic example, Blacksheep FPV only allows buying and selling of drone hardware on it's platform with the rest of engagement being on Instagram. That being said, Flight FPV seeks to onboard this ever growing community of pilots and hobbyists on to a decentralized platform where they can form groups on the chat hence form teams, organize friendly/competitive  races, share ideas, purchase NFT based FPV event tickets, buy/sell their aerial videos and photos creations or even more exiting, go out on virtual FPV expeditions! 🚁
 
+<h1 align="center">
+ TECH STACK 👩‍💻 
+</h1>
 * FVM - To deploy the Marketplace and Ticketing smart contracts.
   
 * ENS - To enable pilots/users to have a personalized avatar derived from the ENS Avatar as well as use their ENS name as their profile name on the platform
