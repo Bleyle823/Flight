@@ -7,6 +7,7 @@ Flight is a decentralized platform that creates a vibrant community where Drone 
 <h1 align="center">
  TECH STACK 👩‍💻 
 </h1>
+
 * FVM - To deploy the Marketplace and Ticketing smart contracts.
   
 * ENS - To enable pilots/users to have a personalized avatar derived from the ENS Avatar as well as use their ENS name as their profile name on the platform
