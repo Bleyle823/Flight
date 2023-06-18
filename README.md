@@ -154,10 +154,11 @@ As an example to store most of the data available for a deal run the store-all c
 yarn hardhat store-all --contract "DEPLOYED FILECOIN_MARKET_CONSUMER CONTRACT ADDRESS HERE" --dealid "707"
 ```
 ## Screenshots
-![Screenshot (77)](https://github.com/Bleyle823/Flight/assets/86532040/08072a26-2971-4aee-aa5d-24e90a392ebe)
+
 ![Screenshot (67)](https://github.com/Bleyle823/Flight/assets/86532040/c8cb6e42-525a-4acf-9dfe-6983bc84081d)
 ![Screenshot (68)](https://github.com/Bleyle823/Flight/assets/86532040/cf64f55c-b7b2-4c2c-963d-fc38cfdd0485)
 ![Screenshot (69)](https://github.com/Bleyle823/Flight/assets/86532040/65d8b22f-01df-4767-8d6f-d22ef62f4727)
+![Screenshot (77)](https://github.com/Bleyle823/Flight/assets/86532040/08072a26-2971-4aee-aa5d-24e90a392ebe)
 ![Screenshot (70)](https://github.com/Bleyle823/Flight/assets/86532040/5ecfe010-5fbb-4091-9c1d-35f86e91cabd)
 ![Screenshot (71)](https://github.com/Bleyle823/Flight/assets/86532040/a99355c6-ff63-4960-8801-1c6094cd2186)
 ![Screenshot (72)](https://github.com/Bleyle823/Flight/assets/86532040/22061299-7705-4d60-9cf9-88c9cb0e6af4)
