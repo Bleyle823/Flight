@@ -23,7 +23,7 @@ export default function BottomNav() {
           </Link>
           <Link href="/SendInfo">
             <div className="transition relative group-hover:-translate-x-1 group-hover:-translate-y-2 bg-gray-100 dark:bg-[#1F2937]  w-[47px] h-[47px] flex justify-center items-center mx-1 rounded-xl cursor-pointer hover:bg-[#f37f7fc2] dark hover:bg-[#f37f7fc2]   ">
-              <img src="/Marketplace.png" width="150" height="150" />
+              <img src="/Storage.png" width="150" height="150" />
             </div>
           </Link>
 
@@ -32,21 +32,21 @@ export default function BottomNav() {
               <img src="/Chat.png" width="30" height="30" />
             </div>
           </Link>
-          <Link href="/about">
+          <Link href="/Video">
             <div className="transition relative group-hover:-translate-x-1 group-hover:-translate-y-2 bg-gray-100 dark:bg-[#1F2937] l w-[47px] h-[47px] flex justify-center items-center mx-2 rounded-xl cursor-pointer hover:bg-[#f37f7fc2] dark hover:bg-[#f37f7fc2] ">
-              <img src="/Icons.png" width="35" height="35" />
+              <img src="/VideoChat2.png" width="35" height="35" />
             </div>
           </Link>
           <Link href="/HuddleLiveStream">
             <div className="transition relative group-hover:-translate-x-1 group-hover:-translate-y-2 bg-gray-100 dark:bg-[#1F2937] l w-[47px] h-[47px] flex justify-center items-center mx-2 rounded-xl cursor-pointer hover:bg-[#f37f7fc2] dark hover:bg-[#f37f7fc2] ">
-              <img src="/Icons.png" width="35" height="35" />
+              <img src="/Live2.png" width="35" height="35" />
             </div>
           </Link>
 
           
           <Link href="/Tickets">
             <div className="transition relative group-hover:-translate-x-1 group-hover:-translate-y-2 bg-gray-100 dark:bg-[#1F2937] l w-[47px] h-[47px] flex justify-center items-center mx-2 rounded-xl cursor-pointer hover:bg-[#f37f7fc2] dark hover:bg-[#f37f7fc2] ">
-              <img src="/Icons.png" width="35" height="35" />
+              <img src="/Events2.png" width="35" height="35" />
             </div>
           </Link>
         </div>
