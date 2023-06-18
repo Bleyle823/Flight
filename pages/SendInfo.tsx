@@ -63,8 +63,10 @@ export default function sendInfo() {
 
   return (
     <div className="p-5 mt-20 ">  
+    
 
     <div className="relative p-8 mt-48 flex flex-col min-w-min justify-center items-center  bg-black shadow-xl rounded-xl"> 
+    
 
     <div className="flex flex-col rounded-xl w-1/2 place-items-center  p-4"
           style={{

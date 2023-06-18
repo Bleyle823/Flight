@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import MarketPlace from "../components/MarketPlace";
 import Oauth from "../components/oauth";
+
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 
