@@ -24,9 +24,9 @@ const Lobby = () => {
   });
 
   return (
-    <div className="flex w-full gap-4">
+    <div className="flex  w-full gap-4">
       <div className="flex flex-1 flex-col items-center justify-center  h-full gap-4">
-        <div className="glassPanel flex gap-6 w-full">
+        <div className="glassPanel flex gap-6 w-full ">
           <video
             ref={videoRef}
             autoPlay

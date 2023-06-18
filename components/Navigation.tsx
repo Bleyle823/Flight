@@ -9,15 +9,15 @@ const Navigation = ({ account, setAccount }) => {
 
   return (
     <nav>
-      <div className='nav__brand'>
+      <div className=' flex flex-col  justify-center items-center mt-5 ml-96 nav__brand '>
        
 
-        <input className='nav__search' type="text" placeholder='Find millions of experiences' />
+        <input className='text-center nav__search' type="text" placeholder='Find millions of experiences' />
 
         <ul className='nav__links'>
-          <li><a href="/">Concerts</a></li>
-          <li><a href="/">Sports</a></li>
-          <li><a href="/">Arts & Theater</a></li>
+          <li><a href="/">Nairobi MeetUp</a></li>
+          <li><a href="/">FPV Mombasa</a></li>
+          <li><a href="/">FPV Race Nairobi</a></li>
           <li><a href="/">More</a></li>
         </ul>
       </div>
